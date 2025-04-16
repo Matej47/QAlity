@@ -15,6 +15,7 @@ export default function OrdersPage() {
   const [article, setArticle] = useState<string>("");
   const [selectedPayment, setSelectedPayment] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const [contact, setContact] = useState({
@@ -22,6 +23,10 @@ export default function OrdersPage() {
     phone: "",
   });
   const handleCreate = () => {
+    // Clear any previous messages
+    setErrorMessage(null);
+    setSuccessMessage(null);
+
     // Check for required fields
     if (
       !selectedShop ||
@@ -35,14 +40,17 @@ export default function OrdersPage() {
       (!useDefaultAddress && Object.values(address).every((val) => val === ""))
     ) {
       setErrorMessage("Please fill in all required fields before creating!");
-
       setTimeout(() => setErrorMessage(null), 5000); // Hide after 5s
       return;
     }
 
-    const testCaseJSON = generateTestCase();
-    console.log(testCaseJSON);
-    // you can proceed with your logic here, like sending the data etc.
+    // Success!
+    setSuccessMessage("✅ Test case created successfully!");
+    setTimeout(() => setSuccessMessage(null), 5000); // Hide after 5s
+
+    // Your logic to handle the created test case can go here
+    const testCase = generateTestCase();
+    console.log("Test Case:", testCase);
   };
 
   const [customerType, setCustomerType] = useState<"B2B" | "B2C" | null>(null);
@@ -257,8 +265,14 @@ export default function OrdersPage() {
         </Link>
 
         {errorMessage && (
-          <div className="absolute left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-4 py-2 rounded shadow">
+          <div className="absolute left-1/2 transform -translate-x-1/2 bg-red-700 text-white px-4 py-2 rounded shadow-lg">
             {errorMessage}
+          </div>
+        )}
+
+        {successMessage && (
+          <div className="absolute left-1/2 transform -translate-x-1/2 bg-green-700 text-white px-4 py-2 rounded shadow-lg">
+            {successMessage}
           </div>
         )}
 
@@ -502,6 +516,7 @@ export default function OrdersPage() {
               value={article}
               onChange={(e) => setArticle(e.target.value)}
             >
+              <option value="Basic article - 10005399">-</option>
               <option value="Basic article - 10005399">
                 Basic article - 10005399
               </option>

@@ -516,7 +516,7 @@ export default function OrdersPage() {
               value={article}
               onChange={(e) => setArticle(e.target.value)}
             >
-              <option value="Basic article - 10005399">-</option>
+              <option value="">Select article</option>
               <option value="Basic article - 10005399">
                 Basic article - 10005399
               </option>

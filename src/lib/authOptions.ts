@@ -2,6 +2,18 @@ import fs from "fs";
 import path from "path";
 import { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { Session } from "next-auth";
+
+// Extend the Session type
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      email: string;
+      isValid: boolean;
+    }
+  }
+}
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -42,6 +54,17 @@ export const authOptions: AuthOptions = {
       return token;
     },
     async session({ session, token }) {
+      // Check if user still exists
+      const usersFile = path.join(process.cwd(), "users.json");
+      const users = JSON.parse(fs.readFileSync(usersFile, "utf-8"));
+
+      const found = users.find((u: any) => u.email === token.id);
+      
+      // If user not found, throw error to invalidate session
+      if (!found) {
+        throw new Error("User no longer exists");
+      }
+
       session.user.id = token.id as string;
       return session;
     },

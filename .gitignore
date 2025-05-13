@@ -9,5 +9,16 @@ frontend/node_modules/
 dist/
 
 # Environment
-.env
 *.sqlite3
+
+# Editor directories and files
+.vs/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+.idea/
+*.sublime-workspace
+*.sublime-project
+.cursorignore
